@@ -1,3 +1,0 @@
-Quick Shop
-Quick Shop is a web application that helps users browse product catalogs from multiple local stores, compare prices, and find the best deals easily.
- The platform features a search functionality, category browsing, user sessions (cookies or login/logout), and a shopping cart.

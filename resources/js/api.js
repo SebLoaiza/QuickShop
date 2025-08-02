@@ -48,15 +48,15 @@ $(document).ready(function () {
                 $('#results').empty();
                 check_grey();
                 createArray(response);
-                console.log(selectedStores);
+                console.log(selectedStores);     
                 let filteredData = filterResults(api_data, selectedStores);
                 renderResults(filteredData);
             },
             error: function (xhr, status, error) {
                 console.error('AJAX error:', error);
-                $('#results').html('<p>An error occurred while fetching data.</p>');
+                $('#results').html('<p>An error occurred while fetching data.</p>');   
             }
-        });
+        })
     }
 
     function createArray(data) {

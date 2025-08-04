@@ -22,8 +22,8 @@ To deploy QuickShop, you need a hosting environment that provides the following:
 | Requirement         | Description                           |
 |---------------------|---------------------------------------|
 | Web Server          | Apache or Nginx                       |
-| PHP Support         | PHP X.x+                              |
-| MySQL Database      | MySQL X.x+ or MariaDB 1X.x+           |
+| PHP Support         | PHP 8.4+                              |
+| MySQL Database      | MySQL 8.4+ or MariaDB 12.1+           |
 | File Management     | cPanel File Manager or equivanlent    |
 | Database Access     | phpMyAdmin or equivalent              |
 | HTTPS (SSL)         | Recommended for secure login sessions |
@@ -143,6 +143,7 @@ After completing the steps:
 
 For technical questions or assistance with setup, please contact the development team:
 
-- email@email.com
-- email@email.com
-- email@email.com
+- johnsk26@rpi.edu
+- dalyo@rpi.edu
+- zhenga6@rpi.edu
+- loaizs@rpi.edu

@@ -294,5 +294,28 @@
     </div>
 
     <script src="../resources/js/api.js"></script>
+
+    <script>
+        function querySearchBar(term) {
+            if (typeof term !== 'string' || term.trim() === '') return;
+            window.location.href = `./search.html?q=${encodeURIComponent(term.trim())}`;
+        }
+
+        $(document).ready(function() {
+            $('.search-button').on('click', function () {
+                const searchTerm = $('#search-input').val();
+                querySearchBar(searchTerm);
+            });
+
+            $('#search-input').on('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const searchTerm = $(this).val();
+                    querySearchBar(searchTerm);
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>

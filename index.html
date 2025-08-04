@@ -118,6 +118,16 @@
                     window.location.href = `./html/search.html?q=${encodeURIComponent(searchTerm)}`;
                 }
             });
+
+            $('#search-input').on('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const searchTerm = $(this).val();
+                    if(searchTerm.trim() !== '') {
+                        window.location.href = `./html/search.html?q=${encodeURIComponent(searchTerm)}`;
+                    }
+                }
+            });
         });
 
         function querySearchBar(term) {

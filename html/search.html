@@ -256,8 +256,8 @@
             <div class="widgets">
                 <a href="../index.html">About</a>
                 <a href="mailto:peterl8@rpi.edu,carla2@rpi.edu,loaizs@rpi.edu" target="_blank">Contact</a>
-                <a href="../resources/php/login.php">Login</a>
-                <a href="../resources/php/logout.php">Logout</a>
+                <!-- a href="../resources/php/login.php">Login</a-->
+                <!-- a href="../resources/php/logout.php">Logout</a-->
             </div>
         </div>
     </div>
@@ -294,5 +294,28 @@
     </div>
 
     <script src="../resources/js/api.js"></script>
+
+    <script>
+        function querySearchBar(term) {
+            if (typeof term !== 'string' || term.trim() === '') return;
+            window.location.href = `./search.html?q=${encodeURIComponent(term.trim())}`;
+        }
+
+        $(document).ready(function() {
+            $('.search-button').on('click', function () {
+                const searchTerm = $('#search-input').val();
+                querySearchBar(searchTerm);
+            });
+
+            $('#search-input').on('keydown', function(e) {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    const searchTerm = $(this).val();
+                    querySearchBar(searchTerm);
+                }
+            });
+        });
+    </script>
+
 </body>
 </html>

@@ -1,19 +1,9 @@
 <?php
 include('./connection.php');
-session_start();
 
-// Check if the user is logged in
-if (!isset($_SESSION['loggedin']) || !$_SESSION['loggedin']) {
-    header("Location: login.php");
-    exit();
-}
-
-$user_id = $_SESSION['user_id'];
-
-// Fetch cart items from the database
-$sql = "SELECT * FROM shopping_list WHERE user_id = ?";
+// Fetch all cart items from the database 
+$sql = "SELECT * FROM shopping_list";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("d", $user_id);
 $stmt->execute();
 $result = $stmt->get_result();
 
@@ -39,229 +29,164 @@ $conn->close();
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Your Cart</title>
-    <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" type="image/x-icon" href="../images/Logo-simple.svg">
-
+    <title>Shopping Cart - QuickShop</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
-            padding: 0;
+            margin: 20px;
+            background-color: #f5f5f5;
         }
-
-        .cart-container {
-            max-width: 900px;
-            padding: 260px 30px;
+        .container {
+            max-width: 800px;
             margin: 0 auto;
             background-color: white;
+            padding: 20px;
             border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
-
-        h2 {
-            text-align: center;
-            font-size: 28px;
-            margin-bottom: 20px;
-            color: #333;
-        }
-
         .cart-item {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 15px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
-            padding: 15px;
-            border-bottom: 1px solid #eee;
-            margin-bottom: 15px;
+            gap: 15px;
         }
-
         .cart-item img {
-            width: 30px;
-            height: auto;
+            width: 80px;
+            height: 80px;
             object-fit: cover;
-            border-radius: 0;
-            margin-right: 0;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: opacity 0.2s;
         }
-
-        #pic {
-            width: 100px;
-            height: 100px;
-            margin-right: 15px;
+        .cart-item img:hover {
+            opacity: 0.8;
         }
-
-        .cart-item .details {
+        .item-details {
             flex-grow: 1;
         }
-
-        .cart-item .details h4 {
-            margin: 0;
-            font-size: 18px;
-            color: #333;
-        }
-
-        .cart-item .details p {
-            margin: 5px 0;
-            color: #777;
-        }
-
-        .cart-item .price {
-            font-size: 18px;
-            color: #4caf50;
+        .item-name {
             font-weight: bold;
-        }
-
-        .remove-btn {
-            padding: 8px 12px;
-            background-color: #f44336;
-            margin-left: 10px;
-            color: white;
-            border: none;
-            border-radius: 5px;
+            margin-bottom: 5px;
             cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
+            color: #2c5aa0;
+            text-decoration: none;
         }
-
-        .remove-btn:hover {
-            background-color: #e53935;
+        .item-name:hover {
+            text-decoration: underline;
         }
-
-        .open-btn {
-            padding: 8px 12px;
-            background-color: #2196F3;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            transition: background-color 0.3s;
-            margin-left: 10px;
+        .item-store {
+            color: #666;
+            margin-bottom: 5px;
         }
-
-        .open-btn:hover {
-            background-color: #1976D2;
+        .item-price {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2c5aa0;
         }
-
-        .total-price {
-            text-align: right;
-            font-size: 24px;
+        .total-section {
+            border-top: 2px solid #ddd;
+            padding-top: 20px;
             margin-top: 20px;
-            font-weight: bold;
-            color: #333;
+            text-align: right;
         }
-
+        .total-price {
+            font-size: 24px;
+            font-weight: bold;
+            color: #2c5aa0;
+        }
         .empty-cart {
             text-align: center;
-            font-size: 18px;
-            color: #777;
-            margin-top: 40px;
+            padding: 40px;
+            color: #666;
+        }
+        .remove-btn {
+            background-color: #dc3545;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .remove-btn:hover {
+            background-color: #c82333;
+        }
+        .back-btn {
+            background-color: #6c757d;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 20px;
+        }
+        .back-btn:hover {
+            background-color: #5a6268;
+            text-decoration: none;
+            color: white;
         }
     </style>
 </head>
 <body>
-<div id="navbar">
-    <img id="logo" src="../images/logo.svg" onclick="window.location.href = '../../index.html';" alt="Logo">
-
-    <div id="navbar-wrap">
-                <span id="search-bar">
-                    <input type="text" id="search-input" placeholder="Search products...">
-                    <button class="search-button" onclick="" aria-label="Search">
-                        <img src="../images/Search.svg" alt="Search Icon">
+    <div class="container">
+        <a href="../../index.html" class="back-btn">← Home</a>
+        <h1>Shopping Cart</h1>
+        
+        <?php if ($emptyCart): ?>
+            <div class="empty-cart">
+                <h2>Your cart is empty</h2>
+                <p>Add some items to your cart to see them here!</p>
+            </div>
+        <?php else: ?>
+            <?php foreach ($cartItems as $item): ?>
+                <div class="cart-item">
+                    <img src="<?php echo htmlspecialchars($item['image_url']); ?>" 
+                         alt="<?php echo htmlspecialchars($item['name']); ?>"
+                         onerror="this.src='https://via.placeholder.com/80x80?text=No+Image'"
+                         onclick="window.open('<?php echo htmlspecialchars($item['URL']); ?>', '_blank')">
+                    
+                    <div class="item-details">
+                        <div class="item-name" onclick="window.open('<?php echo htmlspecialchars($item['URL']); ?>', '_blank')">
+                            <?php echo htmlspecialchars($item['name']); ?>
+                        </div>
+                        <div class="item-store">Store: <?php echo htmlspecialchars($item['store']); ?></div>
+                        <div class="item-price">$<?php echo number_format($item['price'], 2); ?></div>
+                    </div>
+                    
+                    <button class="remove-btn" onclick="removeItem(<?php echo $item['shopping_id']; ?>)">
+                        Remove
                     </button>
-
-                    <button id="shopping-cart" onclick="window.location.href = './cart.php';">
-                        <img src="../images/Cart.svg" alt="Cart">
-                        <label>Go to Cart</label>
-                    </button>
-                    <div id="dropdown-menu">
-                <div id="dropdown-grid">
-                    <div class="cell" onclick="querySearchBar('produce')">
-                        <img src="../images/produce-category.png" alt="Produce">
-                        <p>Produce</p>
-                    </div>
-                    <div class="cell" onclick="querySearchBar('school supplies')">
-                        <img src="../images/school-category.png" alt="School Supplies">
-                        <p>School Supplies</p>
-                    </div>
-                    <div class="cell" onclick="querySearchBar('beverages')">
-                        <img src="../images/drinks-category.png" alt="Beverages">
-                        <p>Beverages</p>
-                    </div>
-                    <div class="cell" onclick="querySearchBar('household&essentials')">
-                        <img src="../images/household-category.png" alt="Household Essentials">
-                        <p>Household Essentials</p>
-                    </div>
-                    <div class="cell" onclick="querySearchBar('meat')">
-                        <img src="../images/meat-category.png" alt="Meat">
-                        <p>Meat</p>
-                    </div>
-                    <div class="cell" onclick="querySearchBar('cleaning&supplies')">
-                        <img src="../images/cleaning-category.png" alt="Cleaning Supplies">
-                        <p>Cleaning Supplies</p>
-                    </div>
+                </div>
+            <?php endforeach; ?>
+            
+            <div class="total-section">
+                <div class="total-price">
+                    Total: $<?php echo number_format($totalPrice, 2); ?>
                 </div>
             </div>
-                </span>
-
-            <div class="widgets">
-                <a href="../../index.html">About</a>
-                <a href="mailto:peterl8@rpi.edu,carla2@rpi.edu,loaizs@rpi.edu" target="_blank">Contact</a>
-                <a href="./login.php">Login</a>
-                <a href="./logout.php">Logout</a>
-            </div>
+        <?php endif; ?>
     </div>
-</div>
 
-<div class="cart-container">
-    <h2>Your Shopping Cart</h2>
-
-    <?php if ($emptyCart): ?>
-        <div class="empty-cart">
-            <p>Your cart is empty. Start shopping now!</p>
-        </div>
-    <?php else: ?>
-        <?php foreach ($cartItems as $item): ?>
-            <div class="cart-item" id="cart-item-<?= $item['shopping_id']; ?>">
-                <img src="<?= $item['image_url']; ?>" id="pic" alt="<?= $item['name']; ?>">
-                <div class="details">
-                    <h4><?= $item['name']; ?></h4>
-                    <p>Store: <?= $item['store']; ?></p>
-                    <p>Price: $<?= number_format($item['price'], 2); ?></p>
-                </div>
-                <div class="price">
-                    $<?= number_format($item['price'], 2); ?>
-                </div>
-                <button class="remove-btn" data-item-id="<?= $item['shopping_id']; ?>"><img src="../images/icons8-trash.svg" width="12" height="auto"></button>
-                <button class="open-btn" onclick="window.open('<?= $item['URL']; ?>', '_blank')"><img src="../images/external-link-svgrepo-com.svg" width="12" height="auto"></button>
-            </div>
-        <?php endforeach; ?>
-
-        <div class="total-price">
-            Total Price: $<?= number_format($totalPrice, 2); ?>
-        </div>
-    <?php endif; ?>
-</div>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script>
-    // Remove item from cart via AJAX
-    $(document).on('click', '.remove-btn', function () {
-        var itemId = $(this).data('item-id');
-
-        $.ajax({
-            url: 'remove_item.php',
-            type: 'POST',
-            data: { item_id: itemId },
-            success: function() {
-                // Remove item from the DOM
-                $('#cart-item-' + itemId).fadeOut();
-            },
-            error: function(xhr, status, error) {
-                console.error('AJAX error:', error);
-                alert('Error removing item.');
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script>
+        function removeItem(itemId) {
+            if (confirm('Are you sure you want to remove this item from your cart?')) {
+                $.ajax({
+                    url: 'remove_item.php',
+                    type: 'POST',
+                    data: { id: itemId },
+                    success: function(response) {
+                        location.reload(); // Refresh the page to show updated cart
+                    },
+                    error: function(xhr, status, error) {
+                        alert('Error removing item from cart.');
+                        console.error('AJAX error:', error);
+                    }
+                });
             }
-        });
-    });
-</script>
-
+        }
+    </script>
 </body>
 </html>

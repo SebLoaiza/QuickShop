@@ -135,6 +135,8 @@ $(document).ready(function () {
                 store: productStore
             },
             success: function(response) {
+                console.log('Product added successfully:', response);
+                alert('Product added to cart!');
             },
             error: function(xhr, status, error) {
                 console.error('AJAX error:', error);

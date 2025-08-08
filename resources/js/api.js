@@ -1,5 +1,17 @@
-$(document).ready(function () {
+/*
+    api.js
+    Handles product search results page functionality.
 
+    Features:
+    - Reads the search query from the URL and requests matching results from the API
+    - Fetches, filters, sorts, and renders product data from multiple store platforms
+    - Supports Next/Prev buttons and store filtering via cookies
+    - Allows adding items to the shopping cart through AJAX requests
+    - Updates UI dynamically when sorting options or store filters change
+*/
+
+$(document).ready(function () {
+    // Retrieve the search term from the URL and initialize state variables
     let urlParams = new URLSearchParams(window.location.search).get('q');
     let pageNumber = 1;
     let api_data = [];
@@ -9,6 +21,7 @@ $(document).ready(function () {
         return match ? match[2] : null;
     }
 
+    // Apply initial store filter states from cookie or default to all enabled
     let selectedStores = getCookie('selectedStores') ? JSON.parse(getCookie('selectedStores')) : {
         Amazon: true,
         Walmart: true,
@@ -21,6 +34,7 @@ $(document).ready(function () {
     if (urlParams)
         get_search(urlParams, pageNumber, selectedStores);
 
+    // Disable or enable "Prev" button based on current page
     function check_grey() {
         if (pageNumber === 1) {
             $('#prevPage').css({
@@ -38,6 +52,7 @@ $(document).ready(function () {
     }
     check_grey();
 
+    // Fetch product search results from the backend API
     function get_search(searchName, pageNumber, selectedStores) {
         $.ajax({
             url: '../resources/php/api.php',
@@ -59,6 +74,7 @@ $(document).ready(function () {
         })
     }
 
+    // Convert API response object into a flat array of product details
     function createArray(data) {
         api_data = [];
         for (const platform in data) {
@@ -73,6 +89,7 @@ $(document).ready(function () {
         }
     }
 
+    // Sorts the API data array according to the selected dropdown option
     function sortResults(api_data) {
         const sortOption = document.getElementById('sortDropdown').value;
         if (sortOption === 'priceLowToHigh') {
@@ -87,6 +104,8 @@ $(document).ready(function () {
         return api_data;
     }
 
+
+    // Update store filter button states (active/inactive)
     function updateSidebar(selectedStores) {
         $('.store-toggle').each(function () {
             let store = $(this).data('store');
@@ -115,6 +134,7 @@ $(document).ready(function () {
         $('#results').append(platformHTML);
     }
 
+    // Handle "Add to Cart" button clicks
     $('#results').on('click', '.addToCart', function(event) {
         event.stopPropagation();
 
@@ -145,6 +165,7 @@ $(document).ready(function () {
         });
     });
 
+    // Clicking the product card opens the original store page in a new tab
     $('#results').on('click', '.product-item', function() {
         let productURL = $(this).find('.addToCart').data('url');
         window.open(productURL, '_blank');

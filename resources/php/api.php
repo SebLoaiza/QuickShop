@@ -1,74 +1,89 @@
 <?php
+    /*
+        api.php
+        Retrieves product search results from multiple online store APIs via Unwrangle.
 
-function get_search($search, $platform, $pageNumber)
-{
-    // these are useless api keys so idk take em if u want
-    $url = "https://data.unwrangle.com/api/getter/?platform=$platform&search=$search&country_code=us&page=$pageNumber&api_key=5c6da4d28564c2e95cc2a5e7bec300c51a40d11c";
-    $curl = curl_init($url);
+        Process:
+        - Accepts GET parameters:
+            action -> search term
+            pageNumber -> results page to fetch
+        - For each supported store:
+            -> Calls the Unwrangle API using cURL
+            -> Collects and decodes JSON responses
+        - Combines results into a single array and returns it as JSON
 
-    curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
-    curl_setopt($curl, CURLOPT_HTTPGET, true);
+        Called by:
+        - JavaScript on the search results page to display products matching the search query
+    */
 
-    return $curl;
-}
+    function get_search($search, $platform, $pageNumber)
+    {
+        $url = "https://data.unwrangle.com/api/getter/?platform=$platform&search=$search&country_code=us&page=$pageNumber&api_key=5c6da4d28564c2e95cc2a5e7bec300c51a40d11c";
+        $curl = curl_init($url);
 
-function fetch_multiple_searches($search, $pageNumber)
-{
-    $mh = curl_multi_init();
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_HTTPGET, true);
 
-    $amazonCurl = get_search($search, "amazon_search", $pageNumber);
-    $walmartCurl = get_search($search, "walmart_search", $pageNumber);
-    $targetCurl = get_search($search, "target_search", $pageNumber);
-    $costcoCurl = get_search($search, "costco_search", $pageNumber);
+        return $curl;
+    }
 
-    curl_multi_add_handle($mh, $amazonCurl);
-    curl_multi_add_handle($mh, $walmartCurl);
-    curl_multi_add_handle($mh, $targetCurl);
-    curl_multi_add_handle($mh, $costcoCurl);
+    function fetch_multiple_searches($search, $pageNumber)
+    {
+        $mh = curl_multi_init();
 
-    $running = null;
-    do {
-        curl_multi_exec($mh, $running);
-        curl_multi_select($mh);
-    } while ($running > 0);
+        $amazonCurl = get_search($search, "amazon_search", $pageNumber);
+        $walmartCurl = get_search($search, "walmart_search", $pageNumber);
+        $targetCurl = get_search($search, "target_search", $pageNumber);
+        $costcoCurl = get_search($search, "costco_search", $pageNumber);
 
-    $amazonData = curl_multi_getcontent($amazonCurl);
-    $walmartData = curl_multi_getcontent($walmartCurl);
-    $targetData = curl_multi_getcontent($targetCurl);
-    $costcoData = curl_multi_getcontent($costcoCurl);
+        curl_multi_add_handle($mh, $amazonCurl);
+        curl_multi_add_handle($mh, $walmartCurl);
+        curl_multi_add_handle($mh, $targetCurl);
+        curl_multi_add_handle($mh, $costcoCurl);
 
-    curl_multi_remove_handle($mh, $amazonCurl);
-    curl_multi_remove_handle($mh, $walmartCurl);
-    curl_multi_remove_handle($mh, $targetCurl);
-    curl_multi_remove_handle($mh, $costcoCurl);
-    curl_multi_close($mh);
+        $running = null;
+        do {
+            curl_multi_exec($mh, $running);
+            curl_multi_select($mh);
+        } while ($running > 0);
 
-    $amazonData = json_decode($amazonData, true);
-    $walmartData = json_decode($walmartData, true);
-    $targetData = json_decode($targetData, true);
-    $costcoData = json_decode($costcoData, true);
+        $amazonData = curl_multi_getcontent($amazonCurl);
+        $walmartData = curl_multi_getcontent($walmartCurl);
+        $targetData = curl_multi_getcontent($targetCurl);
+        $costcoData = curl_multi_getcontent($costcoCurl);
 
-    $combinedResults = [
-        'Amazon' => isset($amazonData['results']) ? $amazonData['results'] : [],
-        'Walmart' => isset($walmartData['results']) ? $walmartData['results'] : [],
-        'Target' => isset($targetData['results']) ? $targetData['results'] : [],
-        'Costco' => isset($costcoData['results']) ? $costcoData['results'] : []
-    ];
+        curl_multi_remove_handle($mh, $amazonCurl);
+        curl_multi_remove_handle($mh, $walmartCurl);
+        curl_multi_remove_handle($mh, $targetCurl);
+        curl_multi_remove_handle($mh, $costcoCurl);
+        curl_multi_close($mh);
 
-    return $combinedResults;
-}
+        $amazonData = json_decode($amazonData, true);
+        $walmartData = json_decode($walmartData, true);
+        $targetData = json_decode($targetData, true);
+        $costcoData = json_decode($costcoData, true);
 
-if (isset($_GET['action']) && isset($_GET['pageNumber'])) {
-    $search = $_GET['action'];
-    $pageNumber = $_GET['pageNumber'];
+        $combinedResults = [
+            'Amazon' => isset($amazonData['results']) ? $amazonData['results'] : [],
+            'Walmart' => isset($walmartData['results']) ? $walmartData['results'] : [],
+            'Target' => isset($targetData['results']) ? $targetData['results'] : [],
+            'Costco' => isset($costcoData['results']) ? $costcoData['results'] : []
+        ];
 
-    $search = htmlspecialchars($search);
-    $pageNumber = htmlspecialchars($pageNumber);
+        return $combinedResults;
+    }
 
-    $combinedResults = fetch_multiple_searches($search, $pageNumber);
+    if (isset($_GET['action']) && isset($_GET['pageNumber'])) {
+        $search = $_GET['action'];
+        $pageNumber = $_GET['pageNumber'];
 
-    echo json_encode($combinedResults);
-} else {
-    echo json_encode(["error" => "No action specified"]);
-}
+        $search = htmlspecialchars($search);
+        $pageNumber = htmlspecialchars($pageNumber);
+
+        $combinedResults = fetch_multiple_searches($search, $pageNumber);
+
+        echo json_encode($combinedResults);
+    } else {
+        echo json_encode(["error" => "No action specified"]);
+    }
 ?>

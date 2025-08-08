@@ -1,3 +1,19 @@
+/* ==========================================================================
+   style.css
+   QuickShop Main Stylesheet
+
+   This file defines the layout, color scheme, and interactive
+   visual elements for the QuickShop frontend. It includes:
+   - Global resets and variables
+   - Navigation bar and search bar styling
+   - Slider/banner section design
+   - Dropdown menu and category grid layout
+   - Information card section
+   - Footer styling
+
+   Fonts are imported from Google Fonts (Audiowide, Comfortaa, Montserrat).
+   ========================================================================== */
+
 @import url('https://fonts.googleapis.com/css2?family=Audiowide&family=Comfortaa:wght@300..700&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
 
 :root {

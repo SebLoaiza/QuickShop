@@ -1,4 +1,18 @@
 <?php
+    /*
+        connection.php
+        Establishes a connection to the MySQL database for QuickShop.
+
+        Process:
+        - Connects to the MySQL server using configured host, username, and password
+        - Creates the QuickShop_data database if it does not already exist
+        - Selects the QuickShop_data database for use
+        - Creates the shopping_list table if it does not already
+
+        Used by:
+        - All PHP scripts that require database access
+    */
+
     $servername = "localhost";
     $username = "root";
     $password = "";

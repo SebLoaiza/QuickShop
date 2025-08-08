@@ -1,3 +1,14 @@
+/*
+    index.js
+    Handles homepage interactivity
+
+    Features:
+    - Automatic image slider cycling through .slide elements every 5 seconds
+    - Dynamic box-shadow effects on #info section elements during scroll
+    - Global querySearchBar() function to redirect searches to search results page
+    - Dropdown menu toggle on search bar focus/blur events
+*/
+
 let currentSlide = 0;
 const slides = document.querySelectorAll('.slide');
 const totalSlides = slides.length;

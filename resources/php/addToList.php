@@ -1,4 +1,17 @@
 <?php
+    /*
+        addToList.php
+        Handles adding a selected product to the shopping_list table in the QuickShop database.
+
+        Process:
+        - Receives product details via POST request (URL, name, image, price, store)
+        - Inserts the product into the database
+        - Returns a success or error message for display in the UI
+
+        Called by:
+        - AJAX requests from the search results page when the "Add To Cart" button is clicked
+    */
+
     include('./connection.php');
 
     if (isset($_POST['url'], $_POST['name'], $_POST['image'], $_POST['price'], $_POST['store'])) {

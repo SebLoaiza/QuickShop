@@ -1,3 +1,6 @@
+-- user_data.sql
+-- Defines the QuickShop_data database and the shopping_list table for storing
+-- product information saved by users, including image URL, price, name, link, and store.
 CREATE DATABASE IF NOT EXISTS QuickShop_data;
 
 USE QuickShop_data;

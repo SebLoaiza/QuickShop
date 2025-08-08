@@ -1,26 +1,17 @@
 <?php
     include('./connection.php');
 
-    session_start();
-
-    if (!$_SESSION['loggedin']) {
-        echo "Error: User not logged in.";
-        exit();
-    }
-
-    $user_id = $_SESSION['user_id'];
-
-
-    if (isset($_POST['url'], $_POST['name'], $_POST['image'], $_POST['price'], $_POST['store'])) {        $productURL = htmlspecialchars($_POST['url']);
+    if (isset($_POST['url'], $_POST['name'], $_POST['image'], $_POST['price'], $_POST['store'])) {
+        $productURL = htmlspecialchars($_POST['url']);
         $productName = htmlspecialchars($_POST['name']);
         $productPrice = (float) $_POST['price'];
         $productStore = htmlspecialchars($_POST['store']);
         $productImage = htmlspecialchars($_POST['image']);
 
-        $sql = "INSERT INTO shopping_list (user_id, price, image_url, name, URL, store) VALUES (?, ?, ?, ?, ?, ?)";
+        $sql = "INSERT INTO shopping_list (price, image_url, name, URL, store) VALUES (?, ?, ?, ?, ?)";
 
         if ($stmt = $conn->prepare($sql)) {
-            $stmt->bind_param("dsssss", $user_id, $productPrice, $productImage, $productName, $productURL, $productStore);
+            $stmt->bind_param("dssss", $productPrice, $productImage, $productName, $productURL, $productStore);
 
             if ($stmt->execute()) {
                 echo "Product added to cart successfully!";

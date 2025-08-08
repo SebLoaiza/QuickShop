@@ -145,7 +145,7 @@ $(document).ready(function () {
         let productStore = $(this).data('store');
 
         $.ajax({
-            url: '../resources/php/addToList.php',
+            url: '../resources/php/add_to_list.php',
             type: 'POST',
             data: {
                 url: productURL,

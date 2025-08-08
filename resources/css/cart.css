@@ -1,0 +1,123 @@
+/*
+    cart.css
+    Styles for the shopping cart page.
+
+    Features:
+    - Provides layout for cart items
+    - Styles item details, prices, and store info
+    - Hover effects for images and buttons
+    - Clearly presents total price and empty cart messages
+    - Consistent styling for navigation buttons
+*/
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 20px;
+    background-color: #f5f5f5; /* Light background for contrast */
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    background-color: white;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.cart-item {
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    padding: 15px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.cart-item img {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.cart-item img:hover {
+    opacity: 0.8; /* Subtle hover feedback */
+}
+
+.item-details {
+    flex-grow: 1; /* Fills remaining space beside image */
+}
+
+.item-name {
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #2c5aa0;
+    text-decoration: none;
+}
+
+.item-name:hover {
+    text-decoration: underline;
+}
+
+.item-store {
+    color: #666;
+    margin-bottom: 5px;
+}
+
+.item-price {
+    font-size: 18px;
+    font-weight: bold;
+    color: #2c5aa0;
+}
+
+.total-section {
+    border-top: 2px solid #ddd;
+    padding-top: 20px;
+    margin-top: 20px;
+    text-align: right;
+}
+
+.total-price {
+    font-size: 24px;
+    font-weight: bold;
+    color: #2c5aa0;
+}
+
+.empty-cart {
+    text-align: center;
+    padding: 40px;
+    color: #666;
+}
+
+.remove-btn {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 8px 12px;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.remove-btn:hover {
+    background-color: #c82333;
+}
+
+.back-btn {
+    background-color: #6c757d;
+    color: white;
+    text-decoration: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    display: inline-block;
+    margin-bottom: 20px;
+}
+
+.back-btn:hover {
+    background-color: #5a6268;
+    text-decoration: none;
+    color: white;
+}

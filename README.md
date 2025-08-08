@@ -21,7 +21,7 @@ QuickShop is a PHP-based product search application that aggregates listings fro
 5. Visit [http://localhost/QuickShop](http://localhost/QuickShop)
 
 ## Deployment
-For deployment to a live server, see the full [Deployment Guide](DEPLOYMENT.md).
+For deployment to a live server, see the full [Deployment Guide](Deployment.md).
 
 ## License
 This project was created as part of a school project and is for demonstration purposes only.

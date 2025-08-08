@@ -13,7 +13,7 @@
         - AJAX requests from the cart page when a user deletes an item
     */
 
-    include('./connection.php');
+    include ('./connection.php');
 
     if (isset($_POST['id'])) {
         $item_id = (int) $_POST['id'];
@@ -34,4 +34,4 @@
     }
 
     $conn->close();
-?>
+

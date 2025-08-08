@@ -64,21 +64,18 @@
         $costcoData = json_decode($costcoData, true);
 
         $combinedResults = [
-            'Amazon' => isset($amazonData['results']) ? $amazonData['results'] : [],
-            'Walmart' => isset($walmartData['results']) ? $walmartData['results'] : [],
-            'Target' => isset($targetData['results']) ? $targetData['results'] : [],
-            'Costco' => isset($costcoData['results']) ? $costcoData['results'] : []
+            "Amazon" => isset($amazonData['results']) ? $amazonData['results'] : [],
+            "Walmart" => isset($walmartData['results']) ? $walmartData['results'] : [],
+            "Target" => isset($targetData['results']) ? $targetData['results'] : [],
+            "Costco" => isset($costcoData['results']) ? $costcoData['results'] : []
         ];
 
         return $combinedResults;
     }
 
     if (isset($_GET['action']) && isset($_GET['pageNumber'])) {
-        $search = $_GET['action'];
-        $pageNumber = $_GET['pageNumber'];
-
-        $search = htmlspecialchars($search);
-        $pageNumber = htmlspecialchars($pageNumber);
+        $search = htmlspecialchars($_GET['action']);
+        $pageNumber = htmlspecialchars($_GET['pageNumber']);
 
         $combinedResults = fetch_multiple_searches($search, $pageNumber);
 
@@ -86,4 +83,3 @@
     } else {
         echo json_encode(["error" => "No action specified"]);
     }
-?>

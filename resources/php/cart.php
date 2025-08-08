@@ -1,40 +1,41 @@
 <?php
-/*
-    cart.php
-    Renders the shopping cart page.
+    /*
+        cart.php
+        Renders the shopping cart page.
 
-    Features:
-    - Retrieves cart items from the database
-    - Calculates the total cart value
-    - Displays item details including image, store, price, and product link
-    - Handles empty cart messaging
-    - Integrates with cart.css for styling and cart.js for interactivity
-*/
+        Features:
+        - Retrieves cart items from the database
+        - Calculates the total cart value
+        - Displays item details including image, store, price, and product link
+        - Handles empty cart messaging
+        - Integrates with cart.css for styling and cart.js for interactivity
+    */
 
-require_once './connection.php';
+    require_once './connection.php';
 
-// Fetch cart items from database
-$sql = "SELECT shopping_id, name, store, price, image_url, URL 
-        FROM shopping_list";
-$stmt = $conn->prepare($sql);
-$stmt->execute();
-$result = $stmt->get_result();
+    // Fetch cart items from database
+    $sql = "SELECT shopping_id, name, store, price, image_url, URL 
+            FROM shopping_list";
+    $stmt = $conn->prepare($sql);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
-$emptyCart = $result->num_rows === 0;
-$cartItems = [];
-$totalPrice = 0;
+    $emptyCart = $result->num_rows === 0;
+    $cartItems = [];
+    $totalPrice = 0;
 
-// Build array of cart items and calculate total
-if (!$emptyCart) {
-    while ($row = $result->fetch_assoc()) {
-        $cartItems[] = $row;
-        $totalPrice += (float) $row['price'];
+    // Build array of cart items and calculate total
+    if (!$emptyCart) {
+        while ($row = $result->fetch_assoc()) {
+            $cartItems[] = $row;
+            $totalPrice += (float) $row['price'];
+        }
     }
-}
 
-$stmt->close();
-$conn->close();
+    $stmt->close();
+    $conn->close();
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

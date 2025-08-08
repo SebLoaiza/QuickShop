@@ -1,6 +1,6 @@
 <?php
     /*
-        addToList.php
+        add_to_list.php
         Handles adding a selected product to the shopping_list table in the QuickShop database.
 
         Process:
@@ -12,7 +12,7 @@
         - AJAX requests from the search results page when the "Add To Cart" button is clicked
     */
 
-    include('./connection.php');
+    include './connection.php';
 
     if (isset($_POST['url'], $_POST['name'], $_POST['image'], $_POST['price'], $_POST['store'])) {
         $productURL = htmlspecialchars($_POST['url']);
@@ -36,13 +36,22 @@
         } else {
             echo "Error: " . $conn->error;
         }
-
-        $conn->close();
     } else {
-        if (!isset($_POST['url'])) echo "Error: Missing product details (url).<br>";
-        if (!isset($_POST['name'])) echo "Error: Missing product details (name).<br>";
-        if (!isset($_POST['price'])) echo "Error: Missing product details (price).<br>";
-        if (!isset($_POST['store'])) echo "Error: Missing product details (store).<br>";
-        if (!isset($_POST['image'])) echo "Error: Missing product details (image).<br>";
+        if (!isset($_POST['url'])) {
+            echo "Error: Missing product details (url).<br>";
+        }
+        if (!isset($_POST['name'])) {
+            echo "Error: Missing product details (name).<br>";
+        }
+        if (!isset($_POST['price'])) {
+            echo "Error: Missing product details (price).<br>";
+        }
+        if (!isset($_POST['store'])) {
+            echo "Error: Missing product details (store).<br>";
+        }
+        if (!isset($_POST['image'])) {
+            echo "Error: Missing product details (image).<br>";
+        }
     }
-?>
+
+    $conn->close();

@@ -15,6 +15,7 @@ $(document).ready(function () {
     let urlParams = new URLSearchParams(window.location.search).get('q');
     let pageNumber = 1;
     let api_data = [];
+    let original_api_data = []; // Store original order for relevance sorting
 
     function getCookie(name) {
         let match = document.cookie.match(new RegExp('(^| )' + name + '=([^;]+)'));
@@ -87,12 +88,17 @@ $(document).ready(function () {
                 });
             }
         }
+        // Store a copy of the original order for relevance sorting
+        original_api_data = [...api_data];
     }
 
     // Sorts the API data array according to the selected dropdown option
     function sortResults(api_data) {
         const sortOption = document.getElementById('sortDropdown').value;
-        if (sortOption === 'priceLowToHigh') {
+        if (sortOption === 'Relevance') {
+            // Return the original order from when the data was first loaded
+            return [...original_api_data];
+        } else if (sortOption === 'priceLowToHigh') {
             return api_data.sort((a, b) => a[0] - b[0]);
         } else if (sortOption === 'priceHighToLow') {
             return api_data.sort((a, b) => b[0] - a[0]);
@@ -100,7 +106,7 @@ $(document).ready(function () {
             return api_data.sort((a, b) => a[1] - b[1]);
         } else if (sortOption === 'ratingHighToLow') {
             return api_data.sort((a, b) => b[1] - a[1]);
-        }
+        } 
         return api_data;
     }
 

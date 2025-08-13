@@ -18,7 +18,7 @@
 
     function get_search($search, $platform, $pageNumber)
     {
-        $url = "https://data.unwrangle.com/api/getter/?platform=$platform&search=$search&country_code=us&page=$pageNumber&api_key=90068e10c46d0f9bbbc5eea53ff5ea891ab56fef";
+        $url = "https://data.unwrangle.com/api/getter/?platform=$platform&search=$search&country_code=us&page=$pageNumber&api_key=1ea5409f132ae2f4520f9521586d76742163f7e0";
         $curl = curl_init($url);
 
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
